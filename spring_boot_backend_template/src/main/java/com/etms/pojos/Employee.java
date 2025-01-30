@@ -17,15 +17,17 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString(callSuper = true, exclude = {"manager","tasks"})
+@ToString(callSuper = true, exclude = {"tasks"})
 public class Employee extends Person {
-	  @ManyToOne  //owing side foreign key to manager
-	  @JoinColumn(name = "manager_id",nullable = false)
-	    private Manager manager;
+	
 
 	  @OneToMany(mappedBy = "employee")  //employee can have multiple tasks
 	  private List<Task> tasks;
 	  
+	  @Override
+	    public String getRole(){
+	        return "EMPLOYEE";
+	    }
 	  //helper method to add tasks
 	  public void addTask(Task task) {
 		  this.tasks.add(task);

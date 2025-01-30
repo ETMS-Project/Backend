@@ -15,4 +15,8 @@ import lombok.ToString;
 @ToString
 public class Admin extends Person {
 
+	  @Override
+	    public String getRole(){
+	        return "EMPLOYEE";
+	    }
 }

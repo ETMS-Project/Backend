@@ -7,18 +7,25 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+
+import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@MappedSuperclass
+@Inheritance(strategy = InheritanceType.JOINED)
+@Entity
+@Table(name="persons")
 @Setter
 @Getter
 @NoArgsConstructor
@@ -37,15 +44,15 @@ public class Person {
 	@Column(length = 25, unique = true) // adds unique constraint
 	private String email;
 	
-	@Column(length = 20, nullable = false) // not null constraint
+	@Column(length = 150, nullable = false) // not null constraint
 	private String password;
 	
 	private LocalDate dob;
 	
-	@Enumerated(EnumType.STRING) // create column of type
+	
 	// varchar to store the name of constant
 	@Column(length = 20) // varchar(30)
-	private EmployeeRole role;
+	private String role;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(length = 20)
@@ -60,4 +67,6 @@ public class Person {
 	@UpdateTimestamp
 	@Column(name="updated_on")
 	private LocalDateTime updatedOn;
+	  @Version
+	     private int version;
 }
