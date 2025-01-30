@@ -1,0 +1,54 @@
+package com.etms.services.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+//import com.etms.custom_exceptions.ResourceNotFoundException;
+import com.etms.daos.ManagerRepository;
+import com.etms.pojos.Manager;
+import com.etms.services.ManagerService;
+
+@Service
+public class ManagerServiceImpl implements ManagerService {
+
+    @Autowired
+    private ManagerRepository managerRepository;
+
+    @Override
+    public List<Manager> getAllManagers() {
+        return managerRepository.findAll();
+    }
+
+    @Override
+    public Manager getManagerById(Long managerId) {
+        return managerRepository.findById(managerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Manager not found with id: " + managerId));
+    }
+
+    @Override
+    public Manager createManager(Manager manager) {
+        return managerRepository.save(manager);
+    }
+
+    @Override
+    public Manager updateManager(Long managerId, Manager managerDetails) {
+        Manager manager = getManagerById(managerId);
+        manager.setFirstName(managerDetails.getFirstName());
+        manager.setLastName(managerDetails.getLastName());
+        manager.setEmail(managerDetails.getEmail());
+        manager.setPassword(managerDetails.getPassword());
+        manager.setDob(managerDetails.getDob());
+        manager.setRole(managerDetails.getRole());
+        manager.setDepartment(managerDetails.getDepartment());
+        manager.setStatus(managerDetails.getStatus());
+        return managerRepository.save(manager);
+    }
+
+    @Override
+    public void deleteManager(Long managerId) {
+        Manager manager = getManagerById(managerId);
+        managerRepository.delete(manager);
+    }
+}

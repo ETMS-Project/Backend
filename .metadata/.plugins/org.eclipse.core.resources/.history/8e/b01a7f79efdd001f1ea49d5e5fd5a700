@@ -1,0 +1,5 @@
+package com.etms.services;
+
+public interface ProjectService {
+
+}

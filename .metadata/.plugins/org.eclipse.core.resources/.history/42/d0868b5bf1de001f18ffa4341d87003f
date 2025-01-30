@@ -1,0 +1,33 @@
+package com.etms.services;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.etms.pojos.Manager;
+import com.etms.repository.ManagerRepository;
+
+import jakarta.transaction.Transactional;
+
+@Service
+@Transactional
+public class ManagerServiceImpl implements ManagerService {
+
+	@Autowired
+    private ManagerRepository managerRepository; 
+	
+	@Override
+    public Manager createManager(Manager manager) {
+        return managerRepository.save(manager);
+    }
+	
+	// private EmployeeRepository employeeRepository;
+
+	// public ManagerServiceImpl(EmployeeRepository employeeRepository) {
+	// this.employeeRepository = employeeRepository;
+	// }
+
+	// @Override
+	// public List<Employee> getAllEmployees() {
+	// return employeeRepository.findAll();
+	// }
+}

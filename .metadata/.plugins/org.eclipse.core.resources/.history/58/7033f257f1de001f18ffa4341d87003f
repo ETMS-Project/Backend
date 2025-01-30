@@ -1,0 +1,9 @@
+package com.etms.services;
+
+import com.etms.pojos.Manager;
+
+public interface ManagerService {
+
+	Manager createManager(Manager manager);
+	
+}

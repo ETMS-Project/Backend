@@ -1,0 +1,5 @@
+package com.etms.custom_exceptions;
+
+public class ResourceNotFoundException {
+
+}

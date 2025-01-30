@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,6 +33,12 @@ public class Project {
 	 
 	 @Column(name="project_name",nullable = false,length = 30)
 	 private String name;
+	 
+	 @JsonFormat(pattern = "yyyy-MM-dd")
+	 private LocalDate startDate;
+	 
+	 @JsonFormat(pattern = "yyyy-MM-dd")
+	 private LocalDate endDate;
 	 
 	 @Column(length=100)
 	 private String description;

@@ -1,8 +1,11 @@
 package com.etms.pojos;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -18,7 +21,20 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString(callSuper = true,exclude = {"projects","employees"})
 public class Manager extends Person {
-
+	
+	@Column(name = "first_name", length = 20) // column name , varchar(20)
+	private String firstName;
+	
+	@Column(name = "last_name", length = 20) // column name , varchar(20)
+	private String lastName;
+	
+	
+	
+	
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private LocalDate dob;
+	
+	
     @OneToMany(mappedBy = "manager") //don't add cascade as when manager is removed tranfer
     private List<Project> projects;// them to other manager
 

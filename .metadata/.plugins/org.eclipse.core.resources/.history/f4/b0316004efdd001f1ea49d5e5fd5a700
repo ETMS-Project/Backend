@@ -1,0 +1,5 @@
+package com.etms.daos;
+
+public interface ProjectRepository {
+
+}

@@ -1,0 +1,59 @@
+package com.etms.controllers;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.etms.pojos.Manager;
+import com.etms.services.ManagerService;
+@CrossOrigin(origins = "http://localhost:5173")
+@RestController
+@RequestMapping("/api/managers")
+public class ManagerController {
+
+    @Autowired
+    private ManagerService managerService;
+
+    @GetMapping
+    public ResponseEntity<List<Manager>> getAllManagers(){
+        return new ResponseEntity<>(managerService.getAllManagers(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Manager> getManagerById(@PathVariable(value = "id") Long managerId){
+        return new ResponseEntity<>(managerService.getManagerById(managerId), HttpStatus.OK);
+    }
+
+//    @PostMapping("/create")
+//    public ResponseEntity<Manager> createManager(@RequestBody Manager manager){
+//        return new ResponseEntity<>(managerService.createManager(manager), HttpStatus.CREATED);
+//    }
+    
+    @PostMapping("/create")
+    public ResponseEntity<String> createManager(@RequestBody Manager manager) {
+        System.out.println("Received manager: " + manager);
+        return ResponseEntity.ok("Manager created successfully!");
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Manager> updateManager(@PathVariable(value = "id") Long managerId, @RequestBody Manager manager){
+        return new ResponseEntity<>(managerService.updateManager(managerId, manager), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deleteManager(@PathVariable(value = "id") Long managerId){
+        managerService.deleteManager(managerId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+}
