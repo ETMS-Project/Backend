@@ -34,7 +34,21 @@ public class Person {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
+	
+	@Column(name = "first_name", length = 20) // column name , varchar(20)
+	private String firstName;
+	
+	@Column(name = "last_name", length = 20) // column name , varchar(20)
+	private String lastName;
+	
+	@Column(length = 25, unique = true) // adds unique constraint
+	private String email;
+	
+	@Column(length = 150, nullable = false) // not null constraint
+	private String password;
+	
+	private LocalDate dob;
+	
 	// varchar to store the name of constant
 	@Column(length = 20) // varchar(30)
 	private String role;
@@ -43,13 +57,9 @@ public class Person {
 	@Column(length = 20)
 	private Department department;
 	
-	private Boolean status = true;
-	
-	@Column(length = 25, unique = true) // adds unique constraint
-	private String email;
-	
-	@Column(length = 150, nullable = false) // not null constraint
-	private String password;
+	@Enumerated(EnumType.STRING)
+	@Column(length = 20)
+	private PersonStatus status=PersonStatus.WAITING_APPROVAL;
 	
 	@CreationTimestamp
 	@Column(name="created_on")
