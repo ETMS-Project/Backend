@@ -1,6 +1,8 @@
 package com.etms.services;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +10,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.etms.custom_exceptions.ApiException;
+import com.etms.custom_exceptions.ResourceNotFoundException;
 import com.etms.dtos.ApiResponse;
+import com.etms.dtos.EmployeeDto;
+import com.etms.dtos.ManagerRespDto;
 import com.etms.dtos.PersonDto;
+import com.etms.dtos.PersonRespDto;
 import com.etms.pojos.Admin;
 import com.etms.pojos.Employee;
 import com.etms.pojos.Manager;
 import com.etms.pojos.Person;
+import com.etms.pojos.PersonStatus;
 import com.etms.repository.AdminRepository;
 import com.etms.repository.EmployeeRepository;
 import com.etms.repository.ManagerRepository;
@@ -70,4 +77,67 @@ public class PersonServiceImpl implements PersonService {
         Person savedPerson =  personRepository.save(person);
         return new ApiResponse("User registered with ID " + savedPerson.getId());
     }
+	
+	
+	@Override
+	public List<PersonRespDto> getAllRequests() {
+		return personRepository.findByStatus(PersonStatus.WAITING_APPROVAL).stream()
+				.map(person->modelMapper.map(person, PersonRespDto.class)).collect(Collectors.toList());
+		
+	}
+	@Override
+	public List<PersonRespDto> getAllWorkers() {
+		// TODO Auto-generated method stub
+		return personRepository.findByStatus(PersonStatus.ACTIVE).stream()
+				.map(person->modelMapper.map(person, PersonRespDto.class)).collect(Collectors.toList());
+	}
+
+
+	@Override
+	public ApiResponse approveRequest(Long id) {
+		// TODO Auto-generated method stub
+		Person person=personRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("invalid  id not present"));
+		person.setStatus(PersonStatus.ACTIVE);
+		personRepository.save(person);
+		return new ApiResponse("Approved Worker Succesfully");
+	}
+
+
+	@Override
+	public ApiResponse rejectRequest(Long id) {
+		// TODO Auto-generated method stub
+		Person person=personRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("invalid  id not present"));
+		person.setStatus(PersonStatus.REJECTED);
+		personRepository.save(person);
+		return new ApiResponse("Rejected Worker Succesfully");
+	}
+
+
+	@Override
+	public ApiResponse deletePerson(Long id) {
+		// TODO Auto-generated method stub
+		Person person=personRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("invalid  id not present"));
+		person.setStatus(PersonStatus.DEACTIVE);
+		personRepository.save(person);
+		return new ApiResponse("Deleted Worker Succesfully");
+	}
+
+
+	@Override
+	public List<ManagerRespDto> getAllManagers() {
+		// TODO Auto-generated method stub
+		 List<Person> managers = personRepository.findByRole("MANAGER"); // Changed to "MANAGER"
+	        return managers.stream()
+	                .map(person -> modelMapper.map(person, ManagerRespDto.class))
+	                .collect(Collectors.toList());
+	}
+	@Override
+	public List<EmployeeDto> getAllEmployeesbyRole(){
+		 	
+	 List<EmployeeDto> employees = personRepository.findByRole("EMPLOYEE").stream()
+			 .map(person -> modelMapper.map(person,EmployeeDto.class)).collect(Collectors.toList());
+		
+	 return employees; 
+		  
+	}
 }

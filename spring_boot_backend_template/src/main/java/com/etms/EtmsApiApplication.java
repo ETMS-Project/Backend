@@ -9,6 +9,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.etms.dtos.ProjectAddReqDto;
+import com.etms.pojos.Project;
+
 @SpringBootApplication
 public class EtmsApiApplication {
 
@@ -24,7 +27,12 @@ public class EtmsApiApplication {
 																						// transferred , during the
 																						// mapping
 				.setPropertyCondition(Conditions.isNotNull());// only non null properties will be transferred from src
-																// --> dest , during the mapping
+				
+		// --> dest , during the mapping
+		 modelMapper.createTypeMap(ProjectAddReqDto.class, Project.class)
+         .addMappings(mapper->mapper.skip(Project::setId))
+         .addMappings(mapper->mapper.skip(Project::setManager));
+     
 		return modelMapper;
 
 	}
